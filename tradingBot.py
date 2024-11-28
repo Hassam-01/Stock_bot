@@ -8,7 +8,9 @@ from sklearn.linear_model import LinearRegression
 from datetime import datetime
 import matplotlib.dates as mdates
 from sklearn.linear_model import LinearRegression
-from plotData import plotData
+from utils.plotData import plotData
+
+# ! IGNORE THIS FILE
 
 # Tiingo API Configuration
 API_KEY = '9a19db152424baf1aa1e20de497d038a0997ba45'  # Replace with your Tiingo API key
