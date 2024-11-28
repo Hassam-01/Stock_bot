@@ -1,6 +1,6 @@
 import os
 
-API_KEY = os.getenv('TIINGO_API_KEY')
+API_KEY = os.getenv('9a19db152424baf1aa1e20de497d038a0997ba45')
 VALID_STOCKS = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'NFLX', 'FB', 'NVDA', 'AMD', 'SPY']
 
 MARKOV_MATRIX = {

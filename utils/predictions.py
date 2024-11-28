@@ -1,5 +1,5 @@
 import random
-from ..config import MARKOV_MATRIX
+from config import MARKOV_MATRIX
 
 def markov_prediction(current_state):
     probabilities = MARKOV_MATRIX[current_state]
