@@ -12,4 +12,5 @@ def apply_fuzzy_logic(slope, volatility, next_state):
     elif next_state == 'DOWN' and slope < -0.1 and volatility > 0.05:
         return 'SELL'
     else:
+        print(f"Slope: {slope}, volatility: {volatility}, next state: {next_state}")
         return 'HOLD'
