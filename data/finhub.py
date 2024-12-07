@@ -3,12 +3,12 @@ from collections import Counter
 import json
 
 # Alpha Vantage API key
-API_KEY = " IQT5ULOHVG0MASPA"
+API_KEY = "H8O8AT2CDVABZN7X"
 
 # Stock symbol (e.g., AAPL for Apple)
-symbol = 'MSFT'
+symbol = 'APPL'
 
-def fetch_data_for_today(symbol,API_KEY):
+def fetch_data_for_today(symbol,API_KEY="H8O8AT2CDVABZN7X"):
     # API URL
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}&outputsize=compact'
 
@@ -20,6 +20,9 @@ def fetch_data_for_today(symbol,API_KEY):
     # Extract the time series data
     time_series = data.get('Time Series (Daily)', {})
     data = time_series
+    if "Information" in data:
+        raise ValueError(f"API Limit Reached: {data['Information']}")
+
 
     # Get the last 5 days (ensure there are at least 5 days of data)
     last_5_days = {date: time_series[date] for date in list(time_series.keys())[:5]}
@@ -27,13 +30,13 @@ def fetch_data_for_today(symbol,API_KEY):
     suggested_action = []
     # Print the last 5 days' data
     for date, stats in last_5_days.items():
-        print(f"Date: {date}")
-        print(f"Open: {stats['1. open']}")
-        print(f"High: {stats['2. high']}")
-        print(f"Low: {stats['3. low']}")
-        print(f"Close: {stats['4. close']}")
-        print(f"Volume: {stats['5. volume']}")
-        print("--------")
+        # print(f"Date: {date}")
+        # print(f"Open: {stats['1. open']}")
+        # print(f"High: {stats['2. high']}")
+        # print(f"Low: {stats['3. low']}")
+        # print(f"Close: {stats['4. close']}")
+        # print(f"Volume: {stats['5. volume']}")
+        # print("--------")
 
 
 
@@ -61,10 +64,10 @@ def fetch_data_for_today(symbol,API_KEY):
         suggested_action.append(trend)
 
         # Print the results
-        print(f"Today's Close: {today_close}")
-        print(f"Yesterday's Close: {yesterday_close}")
-        print(f"SMA (5 days): {sma}")
-        print(f"Suggested Action: {trend}")
+        # print(f"Today's Close: {today_close}")
+        # print(f"Yesterday's Close: {yesterday_close}")
+        # print(f"SMA (5 days): {sma}")
+        # print(f"Suggested Action: {trend}")
 
     count = Counter(suggested_action)
 
@@ -72,4 +75,38 @@ def fetch_data_for_today(symbol,API_KEY):
     max_occurrence = count.most_common(1)
     trend_of_the_day = max_occurrence[0][0]
     print(f"The trend for the today is {trend_of_the_day}")
-fetch_data_for_today(symbol,API_KEY)
+#fetch_data_for_today(symbol,API_KEY)
+
+def fetch_data_previous_months(symbol,API_KEY = "H8O8AT2CDVABZN7X"):
+    # API URL
+
+    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={API_KEY}&outputsize=compact'
+
+    # Get data from Alpha Vantage
+    response = requests.get(url)
+    data = response.json()
+    print(data)
+
+    # Extract the time series data
+    time_series = data.get('Time Series (Daily)', {})
+    data = time_series
+
+    if "Information" in data:
+        raise ValueError(f"API Limit Reached: {data['Information']}")
+
+    # Get the last 5 days (ensure there are at least 5 days of data)
+    prev_months = {date: time_series[date] for date in list(time_series.keys())[::-1][5:60]}
+
+
+    # Print the last 5 days' data
+    # for date, stats in prev_months.items():
+    #     print(f"Date: {date}")
+    #     print(f"Open: {stats['1. open']}")
+    #     print(f"High: {stats['2. high']}")
+    #     print(f"Low: {stats['3. low']}")
+    #     print(f"Close: {stats['4. close']}")
+    #     print(f"Volume: {stats['5. volume']}")
+    #     print("--------")
+    print(prev_months)
+    return prev_months
+fetch_data_previous_months(symbol,API_KEY)
