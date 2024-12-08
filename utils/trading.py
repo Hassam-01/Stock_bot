@@ -1,6 +1,5 @@
 
-import random
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 
 # Example API URL (replace with actual API endpoint)
@@ -24,7 +23,7 @@ def fetch_data_from_api():
         return None
 
 
-def make_trade(symbol, action, quantity):
+def make_trade(signal, price_per_stock):
     """
     Simulate a local trade without calling any API.
     
@@ -36,28 +35,19 @@ def make_trade(symbol, action, quantity):
     Returns:
         dict: A dictionary containing trade details.
     """
-    # Simulate a stock price for the trade
-    price_per_stock = round(random.uniform(50, 5000), 2)  # Random price between $50 and $5000
-    total_price = round(price_per_stock * quantity, 2)
-
     # Log the trade
     trade_details = {
-        "symbol": symbol,
-        "action": action,
-        "quantity": quantity,
+        "signal": signal,
         "price_per_stock": price_per_stock,
-        "total_price": total_price,
-        "trade_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    }
+        "trade_time": (datetime.now() - timedelta(days=6)).strftime("%Y-%m-%d %H:%M:%S"),
+        }
 
     # Print the trade details
-    print("Trade Executed:")
-    print(f"Symbol: {trade_details['symbol']}")
-    print(f"Action: {trade_details['action']}")
-    print(f"Quantity: {trade_details['quantity']}")
-    print(f"Price per stock: ${trade_details['price_per_stock']}")
-    print(f"Total price: ${trade_details['total_price']}")
-    print(f"Trade Time: {trade_details['trade_time']}")
+    print("\033[92mTrade Executed:\033[0m")
+    print(f"Signal: \033[91m{trade_details['signal']}\033[0m")
+    print(f"\033[92mPrice per stock: ${trade_details['price_per_stock']}\033[0m")
+    print(f"\033[92mTrade Time: {trade_details['trade_time']}\033[0m")
+    print("\033[91m---------------------------------------------------------------\033[0m")  
 
     return trade_details
 

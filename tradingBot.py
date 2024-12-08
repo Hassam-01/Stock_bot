@@ -237,3 +237,91 @@ def start_trading_loop():
 
 # Start the trading loop
 start_trading_loop()
+
+
+
+
+
+
+
+# def apply_fuzzy_logic(slope_value, volatility_value, next_state):
+#     """
+#     Predicts stock action (BUY, SELL, or HOLD) using fuzzy logic based on slope, volatility, and next_state.
+
+#     Args:
+#         slope_value (float): The slope of the stock prices (trend direction).
+#         volatility_value (float): The volatility of the stock prices (market risk).
+#         next_state (str): The predicted next state of the market (e.g., "UP", "DOWN", "STABLE").
+
+#     Returns:
+#         str: Suggested action ("BUY", "SELL", or "HOLD").
+#         float: Signal value (0 to 1).
+#     """
+#     # Define fuzzy variables
+#     slope = Antecedent(np.arange(-1, 1.1, 0.1), 'slope')
+#     volatility = Antecedent(np.arange(0, 1.1, 0.1), 'volatility')
+#     market_state = Antecedent(np.arange(0, 3, 1), 'next_state')  # UP = 0, STABLE = 1, DOWN = 2
+#     signal = Consequent(np.arange(0, 1.1, 0.1), 'signal')
+
+#     # Define membership functions for slope
+#     slope['downward'] = fuzz.trimf(slope.universe, [-1, -0.6, -0.2])
+#     slope['flat'] = fuzz.trimf(slope.universe, [-0.3, 0, 0.3])
+#     slope['upward'] = fuzz.trimf(slope.universe, [0.2, 0.6, 1])
+
+#     # Define membership functions for volatility
+#     volatility['low'] = fuzz.trimf(volatility.universe, [0, 0, 0.25])
+#     volatility['medium'] = fuzz.trimf(volatility.universe, [0.2, 0.45, 0.7])
+#     volatility['high'] = fuzz.trimf(volatility.universe, [0.6, 1, 1])
+
+#     # Define membership functions for next_state
+#     market_state['UP'] = fuzz.trimf(market_state.universe, [0, 0, 1])
+#     market_state['STABLE'] = fuzz.trimf(market_state.universe, [0, 1, 2])
+#     market_state['DOWN'] = fuzz.trimf(market_state.universe, [1, 2, 2])
+
+#     # Define membership functions for signal
+#     signal['sell'] = fuzz.trimf(signal.universe, [0, 0, 0.5])
+#     signal['hold'] = fuzz.trimf(signal.universe, [0.4, 0.5, 0.6])
+#     signal['buy'] = fuzz.trimf(signal.universe, [0.5, 1, 1])
+
+#     # Define fuzzy rules
+#     rules = [
+#         Rule(slope['downward'] & volatility['medium'] & market_state['DOWN'], signal['sell']),
+#         Rule(slope['downward'] & volatility['high'] & market_state['DOWN'], signal['sell']),
+#         Rule(slope['flat'] & volatility['medium'] & market_state['STABLE'], signal['hold']),
+#         Rule(slope['upward'] & volatility['low'] & market_state['UP'], signal['buy']),
+#         Rule(slope['upward'] & volatility['medium'] & market_state['UP'], signal['buy']),
+#         Rule(slope['flat'] & volatility['low'] & market_state['UP'], signal['buy']),
+#         Rule(slope['downward'] & volatility['low'] & market_state['DOWN'], signal['sell']),
+#         Rule(slope['flat'] & volatility['high'] & market_state['STABLE'], signal['sell']),
+#     ]
+
+#     # Create and simulate the fuzzy control system
+#     stock_ctrl = ControlSystem(rules)
+#     stock_sim = ControlSystemSimulation(stock_ctrl)
+
+#     # Set input values
+#     stock_sim.input['slope'] = slope_value
+#     stock_sim.input['volatility'] = volatility_value
+
+#     # Map next_state to its fuzzy value
+#     next_state_mapping = {'UP': 0, 'STABLE': 1, 'DOWN': 2}
+#     stock_sim.input['next_state'] = next_state_mapping.get(next_state, 1)  # Default to 'STABLE'
+
+#     # Compute the fuzzy output
+#     stock_sim.compute()
+
+#     # Get the fuzzy output signal
+#     signal_value = stock_sim.output['signal']
+#     print("\033[1;34m" + "-" * 20)
+#     print(f"Signal Value: {signal_value}")
+#     print("-" * 20 + "\033[0m")
+
+#     # Determine action based on signal value
+#     if signal_value < 0.4:
+#         action = "SELL"
+#     elif 0.4 <= signal_value <= 0.6:
+#         action = "HOLD"
+#     else:
+#         action = "BUY"
+
+#     return action

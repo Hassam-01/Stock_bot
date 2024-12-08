@@ -1,1 +1,1 @@
-genetic_algorithm
+next_state

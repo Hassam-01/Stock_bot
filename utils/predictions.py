@@ -88,7 +88,7 @@ def apply_fuzzy_logic(slope_value, volatility_value,next_state):
     elif next_state == 'DOWN':
         if signal_value < 0.3:
             action = "SELL"
-        elif signal_value > 0.7:
+        elif signal_value > 0.8:
             action = "BUY"
         else:
             action = "HOLD"
@@ -111,5 +111,3 @@ if __name__ == "__main__":
     ]
     for test in test_cases:
         print(apply_fuzzy_logic(test['slope'], test['volatility'], test['next_state']))
-
-

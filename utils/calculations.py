@@ -61,3 +61,45 @@ def predict_missing_values(prices):
             prices[i] = model.predict([[i]])[0]
 
     return prices
+
+def normalize_volume(current_volume, min_volume, max_volume):
+    return (current_volume - min_volume) / (max_volume - min_volume)
+
+
+def calculate_RSI(prices, period=14):
+    gains = []
+    losses = []
+    
+    for i in range(1, len(prices)):
+        change = prices[i] - prices[i-1]
+        if change > 0:
+            gains.append(change)
+            losses.append(0)
+        else:
+            gains.append(0)
+            losses.append(abs(change))
+    
+    avg_gain = np.mean(gains[-period:])
+    avg_loss = np.mean(losses[-period:])
+    
+    if avg_loss == 0:
+        return 100  # No loss means RSI is 100 (no downward movement)
+    
+    RS = avg_gain / avg_loss
+    RSI = 100 - (100 / (1 + RS))
+    return RSI
+
+
+def calculate_moving_average_slope(prices, period=30):
+    # Calculate the moving average over the given period
+    moving_avg = np.mean(prices[-period:])
+    
+    # Calculate the slope of the moving average using linear regression
+    x = np.arange(period)  # Time periods
+    y = prices[-period:]  # Prices over the last period
+    
+    # Linear regression to calculate the slope
+    A = np.vstack([x, np.ones_like(x)]).T
+    m, c = np.linalg.lstsq(A, y, rcond=None)[0]  # m is the slope
+    
+    return m
