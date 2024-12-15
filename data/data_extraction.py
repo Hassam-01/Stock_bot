@@ -83,7 +83,7 @@ def analyze_data(stock_symbol):
     for day in last_five_days_data:
         print(colored(f"Date: {day['timestamp']}, Open: {day['open']}, Close: {day['close']}, Volume: {day['volume']}", 'magenta'))
 
-    return dataSend, trade_date, last_five_days_data[-5]['close'], last_five_days_data
+    return dataSend, trade_date, last_five_days_data[-5]['close'], last_five_days_data, most_common_signal
 
 
 if __name__ == "__main__":

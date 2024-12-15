@@ -22,18 +22,22 @@
 #         stock_symbol = input("Enter the stock symbol: ")
 #         current_state = 'STABLE'
 #         try:
-#             stock_data = extraction.analyze_data(stock_symbol)
+#             stock_data, trade_date, trade_price, five_days_trend = extraction.analyze_data(stock_symbol)
 #             # ! Volume of the data
+#             print("00")
 #             volume = [stock_data[i]["volume"] for i in range(len(stock_data))]
+#             print("01")
 #             minVolume = min(volume)
+#             print("02")
 #             maxVolume = max(volume)
+#             print("03")
 #             avg_volume = normalize_volume(volume[-1], minVolume, maxVolume);
+#             print("04")
 #             # ! RSI of the data
 #             close_prices = [stock_data[i]["close"] for i in range(len(stock_data))]
 #             RSI = calculate_RSI(close_prices)
 #             # ! Moving average slope
 #             moving_average_slope = calculate_moving_average_slope(close_prices)
-            
 #             if not stock_data:
 #                 print("NO data was fetched!\nExiting")
 #             slope = calculate_slope(close_prices)
@@ -60,7 +64,7 @@
             
 #             current_price = close_prices[-1]
 #             make_trade(action, current_price)
-
+#             print("last")
 #         except Exception as e:
 #             print(f"Error: {e}")
 #             time.sleep(10)
@@ -75,7 +79,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from utils.calculations import calculate_slope, calculate_volatility, normalize_volume, calculate_RSI, calculate_moving_average_slope
-from utils.predictions import markov_prediction, apply_fuzzy_logic
+from utils.predictions import markov_prediction, apply_fuzzy_logic, predict_state
 import data.data_extraction as extraction
 
 app = FastAPI()
@@ -94,10 +98,11 @@ app.add_middleware(
 @app.post("/api/recommendation")
 def get_recommendation(request: RecommendationRequest):
     stock_symbol = request.ticker.upper()
-    current_state = "STABLE"
     try:
         # Fetch and analyze stock data
-        stock_data, trade_date, trade_price, five_days_trend = extraction.analyze_data(stock_symbol)
+        stock_data, trade_date, trade_price, five_days_trend, common_signal = extraction.analyze_data(stock_symbol)
+        current_state = predict_state(stock_data)
+        print("Current State: ", current_state)
         if not stock_data:
             raise HTTPException(status_code=404, detail="No data found for the stock symbol")
 
@@ -111,9 +116,9 @@ def get_recommendation(request: RecommendationRequest):
         slope = calculate_slope(close_prices)
         volatility = calculate_volatility(close_prices)
         next_state = markov_prediction(current_state)
-        action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI, moving_average_slope)
-        print("12")
-        print("Five days trend from pyhton: ", five_days_trend)
+        print("Next State: ", next_state)
+        action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI, moving_average_slope,common_signal)
+        # print("Five days trend from pyhton: ", five_days_trend)
         response = {
             "signal": action,
             "trade_date": trade_date,
@@ -128,7 +133,6 @@ def get_recommendation(request: RecommendationRequest):
             },
             "five_days_trend_data": five_days_trend,
         }
-        print("13")
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing the request: {e}")
