@@ -95,54 +95,38 @@ app.add_middleware(
 def get_recommendation(request: RecommendationRequest):
     stock_symbol = request.ticker.upper()
     current_state = "STABLE"
-    print("0")
     try:
         # Fetch and analyze stock data
-        print("1")
-        stock_data = extraction.analyze_data(stock_symbol)
-        print("2")
+        stock_data, trade_date, trade_price, five_days_trend = extraction.analyze_data(stock_symbol)
         if not stock_data:
             raise HTTPException(status_code=404, detail="No data found for the stock symbol")
-        print("3")
 
         volume = [stock_data[i]["volume"] for i in range(len(stock_data))]
-        print("4")
         min_volume = min(volume)
         max_volume = max(volume)
         avg_volume = normalize_volume(volume[-1], min_volume, max_volume)
-        print("5")
-
         close_prices = [stock_data[i]["close"] for i in range(len(stock_data))]
-        print("6")
         RSI = calculate_RSI(close_prices)
-        print("7")
         moving_average_slope = calculate_moving_average_slope(close_prices)
-        print("8")
         slope = calculate_slope(close_prices)
-        print("9")
         volatility = calculate_volatility(close_prices)
-        print("10")
         next_state = markov_prediction(current_state)
-        print("11")
         action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI, moving_average_slope)
         print("12")
-
+        print("Five days trend from pyhton: ", five_days_trend)
         response = {
             "signal": action,
-            # "predictionData": {
-            #     "dates": [data["date"] for data in stock_data],
-            #     # "closing": close_prices,
-            #     # "volume": volume,
-            #     # "upper": [price * 1.05 for price in close_prices],  # Mocked upper bound
-            #     # "lower": [price * 0.95 for price in close_prices],  # Mocked lower bound
-            # },
-            # "pythonData": {
-            #     "volatility": volatility,
-            #     "slope": slope,
-            #     "RSI": RSI,
-            #     "moving_average_slope": moving_average_slope,
-            #     "avg_volume": avg_volume,
-            # },
+            "trade_date": trade_date,
+            "trade_price": trade_price,
+            "predictionData": stock_data,
+            "pythonData": {
+                "Volatility": volatility,
+                "Slope": slope,
+                "RSI": RSI,
+                "Moving Avg Slope": moving_average_slope,
+                "Avergae Volume": avg_volume,
+            },
+            "five_days_trend_data": five_days_trend,
         }
         print("13")
         return response
