@@ -117,10 +117,12 @@ def get_recommendation(request: RecommendationRequest):
         volatility = calculate_volatility(close_prices)
         next_state = markov_prediction(current_state)
         print("Next State: ", next_state)
+        
         action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI, moving_average_slope,common_signal)
         # print("Five days trend from pyhton: ", five_days_trend)
         response = {
-            "signal": action,
+            # "signal": "SELL" if stock_symbol == "AAPL" else action,
+            'signal': action,
             "trade_date": trade_date,
             "trade_price": trade_price,
             "predictionData": stock_data,
