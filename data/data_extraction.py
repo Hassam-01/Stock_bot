@@ -66,9 +66,9 @@ def analyze_data(stock_symbol):
     # adjusted_today = last 5th from data fetched
 
     # print("adjusted today: ", data[-5]['timestamp'])
-    adjusted_today_new = datetime.strptime(data[-5]['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")    # Filter last 5 days
+    adjusted_today_new = datetime.strptime(data[-5]['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")  # Filter last 5 days
     last_five_days_data = filter_last_five_days(data)
-    
+
     # Ensure trade date is today - 5
     trade_date = adjusted_today_new.strftime('%Y-%m-%d')
 
@@ -81,9 +81,10 @@ def analyze_data(stock_symbol):
     print(colored(f"Trade price: {last_five_days_data[-5]['close']} (Close)", 'green'))
     print(colored("Prices for the last 5 trading days:", 'yellow'))
     for day in last_five_days_data:
-        print(colored(f"Date: {day['timestamp']}, Open: {day['open']}, Close: {day['close']}, Volume: {day['volume']}", 'magenta'))
+        print(colored(f"Date: {day['timestamp']}, Open: {day['open']}, Close: {day['close']}, Volume: {day['volume']}",
+                      'magenta'))
 
-    return dataSend
+    return dataSend, trade_date, last_five_days_data[-5]['close'], last_five_days_data, most_common_signal
 
 
 if __name__ == "__main__":
