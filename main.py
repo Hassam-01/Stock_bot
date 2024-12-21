@@ -59,16 +59,15 @@ def main():
             print("Moving Average Slope: ", moving_average_slope)
             print("Average Volume: ", avg_volume)
             print("\033[95m--------------------------------------------------\033[0m")
-<<<<<<< HEAD
-=======
+
             
             # action = apply_fuzzy_logic(slope, volatility, next_state)
             action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI, moving_average_slope)
             
             current_price = close_prices[-1]
             make_trade(action, current_price)
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
 
+            print("Abcd")
             # action = apply_fuzzy_logic(slope, volatility, next_state)
             action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI,
                                                      moving_average_slope, common_signal)

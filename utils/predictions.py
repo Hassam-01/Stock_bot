@@ -3,7 +3,6 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy.control import Antecedent, Consequent, Rule, ControlSystem, ControlSystemSimulation
 from config import MARKOV_MATRIX
-<<<<<<< HEAD
 
 
 def predict_state(stock_data):
@@ -24,8 +23,6 @@ def predict_state(stock_data):
     else:
         return "STABLE"
 
-=======
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
 
 def markov_prediction(current_state):
     """Predicts the next state using Markov's model.
@@ -40,10 +37,7 @@ def markov_prediction(current_state):
     next_state = random.choices(list(probabilities.keys()), weights=probabilities.values())[0]
     return next_state
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
 def normalize_rsi(rsi_value):
     """Normalize RSI value to be between 0 and 1."""
     # Ensure rsi_value is a float or int, not a string
@@ -52,13 +46,9 @@ def normalize_rsi(rsi_value):
     else:
         raise ValueError(f"Expected a numerical value for RSI, got {type(rsi_value)} instead.")
 
-<<<<<<< HEAD
 
 def apply_fuzzy_logic(slope_value, volatility_value, next_state, avg_volume_value, rsi_value, moving_avg_value,
                       trend_today):
-=======
-def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_value, rsi_value, moving_avg_value):
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
     """
     Predicts stock action (BUY, SELL, or HOLD) using fuzzy logic based on various indicators.
 
@@ -77,11 +67,7 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
     # Normalize RSI value to be between 0 and 1
     rsi_value = float(rsi_value)
     rsi_value = normalize_rsi(rsi_value)
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
     print("Normalized RSI: ", rsi_value)
 
     # Define fuzzy variables
@@ -94,13 +80,8 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
 
     # Define membership functions for slope
     slope['downward'] = fuzz.trimf(slope.universe, [-1, -0.6, -0.2])
-<<<<<<< HEAD
     slope['flat'] = fuzz.trimf(slope.universe, [-0.3, 0, 0.05])
     slope['upward'] = fuzz.trimf(slope.universe, [0.1, 0.6, 1])
-=======
-    slope['flat'] = fuzz.trimf(slope.universe, [-0.3, 0, 0.3])
-    slope['upward'] = fuzz.trimf(slope.universe, [0.2, 0.6, 1])
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
 
     # Define membership functions for volatility
     volatility['low'] = fuzz.trimf(volatility.universe, [0, 0, 0.2])
@@ -124,34 +105,19 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
 
     # Define membership functions for signal
     signal['sell'] = fuzz.trimf(signal.universe, [0, 0, 0.3])
-<<<<<<< HEAD
     signal['hold'] = fuzz.trimf(signal.universe, [0.2, 0.5, 0.5])
     signal['buy'] = fuzz.trimf(signal.universe, [0.4, 1, 1])
-=======
-    signal['hold'] = fuzz.trimf(signal.universe, [0.2, 0.5, 0.6])
-    signal['buy'] = fuzz.trimf(signal.universe, [0.5, 1, 1])
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
 
     # Define fuzzy rules
     rules = [
         Rule(slope['downward'] & volatility['high'], signal['sell']),
         Rule(slope['downward'] & volatility['medium'], signal['sell']),
         Rule(slope['upward'] & rsi['oversold'], signal['buy']),
-<<<<<<< HEAD
-=======
-        Rule(moving_avg['above'] & avg_volume['high'], signal['buy']),
-        Rule(moving_avg['below'] & avg_volume['low'], signal['sell']),
-        Rule(rsi['overbought'], signal['sell']),
-        Rule(rsi['neutral'] & slope['flat'], signal['hold']),
-        Rule(rsi['oversold'] & moving_avg['below'], signal['buy']),
-        Rule(volatility['low'] & slope['upward'], signal['buy']),
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
         Rule(slope['upward'] & volatility['low'], signal['buy']),
         Rule(slope['flat'] & rsi['neutral'], signal['hold']),
         Rule(slope['flat'] & volatility['medium'], signal['hold']),
         Rule(slope['downward'] & rsi['oversold'], signal['hold']),
         Rule(slope['upward'] & rsi['overbought'], signal['sell']),
-<<<<<<< HEAD
         Rule(slope['flat'] & avg_volume['medium'], signal['buy']),
         Rule(slope['upward'] & avg_volume['low'], signal['hold']),
         Rule(slope['downward'] & avg_volume['high'], signal['sell']),
@@ -161,11 +127,6 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
         Rule(rsi['oversold'] & moving_avg['below'], signal['buy']),
         Rule(moving_avg['above'] & avg_volume['high'], signal['buy']),
         Rule(moving_avg['below'] & avg_volume['low'], signal['sell']),
-=======
-        Rule(volatility['high'] & rsi['neutral'], signal['hold']),
-        Rule(volatility['medium'] & rsi['oversold'], signal['buy']),
-        Rule(volatility['low'] & rsi['overbought'], signal['sell']),
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
         Rule(moving_avg['at'] & avg_volume['medium'], signal['hold']),
         Rule(moving_avg['at'] & rsi['neutral'], signal['hold']),
         Rule(moving_avg['below'] & volatility['medium'], signal['sell']),
@@ -173,21 +134,12 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
         Rule(avg_volume['low'] & rsi['oversold'], signal['buy']),
         Rule(avg_volume['high'] & rsi['overbought'], signal['sell']),
         Rule(avg_volume['medium'] & slope['flat'], signal['hold']),
-<<<<<<< HEAD
         Rule(volatility['low'] & slope['upward'], signal['buy']),
         Rule(volatility['high'] & rsi['neutral'], signal['hold']),
         Rule(volatility['medium'] & rsi['oversold'], signal['buy']),
         Rule(volatility['low'] & rsi['overbought'], signal['sell']),
         Rule(volatility['medium'] & moving_avg['above'], signal['buy']),
         Rule(volatility['medium'] & moving_avg['below'], signal['sell']),
-=======
-        Rule(volatility['medium'] & moving_avg['above'], signal['buy']),
-        Rule(volatility['medium'] & moving_avg['below'], signal['sell']),
-        Rule(slope['flat'] & avg_volume['medium'], signal['buy']),
-        Rule(slope['upward'] & avg_volume['low'], signal['hold']),
-        Rule(slope['downward'] & avg_volume['high'], signal['sell']),
-        Rule(rsi['oversold'] & slope['upward'] & moving_avg['above'], signal['buy']),
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
         Rule(volatility['high'] & slope['downward'], signal['sell']),
     ]
 
@@ -210,18 +162,11 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
 
     # Use next_state to adjust the action based on the signal
     print("Signal Value: ", signal_value)
-<<<<<<< HEAD
     print(trend_today)
     if next_state == 'UP':
         if signal_value > 0.55:
             action = "BUY"
         elif signal_value < 0.3:
-=======
-    if next_state == 'UP':
-        if signal_value > 0.6:
-            action = "BUY"
-        elif signal_value < 0.4:
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
             action = "SELL"
         else:
             if trend_today == "BUY":
@@ -237,11 +182,10 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
         elif signal_value > 0.7:
             action = "BUY"
         else:
-<<<<<<< HEAD
             if trend_today == "BUY":
                 action = "BUY"
             elif trend_today == "SELL":
-                action = "SELL"
+                action = "HOLD"
             else:
                 action = "HOLD"
 
@@ -258,20 +202,6 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
     return action, signal_value
 
 
-=======
-            action = "HOLD"
-
-    else:
-        if signal_value < 0.4:
-            action = "SELL"
-        elif 0.4 <= signal_value < 0.7:
-            action = "HOLD"
-        else:
-            action = "BUY"
-
-    return action, signal_value
-
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
 if __name__ == "__main__":
     # Example usage
     test_cases = [
@@ -279,11 +209,7 @@ if __name__ == "__main__":
         {'slope': -0.7, 'volatility': 0.9, 'rsi': 75, 'moving_avg': -0.4, 'avg_volume': 0.3, 'next_state': 'DOWN'},
         {'slope': 0.0, 'volatility': 0.5, 'rsi': 50, 'moving_avg': 0.0, 'avg_volume': 0.5, 'next_state': 'STABLE'},
     ]
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 7166ddf7327c56f6a492029b647c4375c8c7a336
     for test in test_cases:
         action, signal = apply_fuzzy_logic(
             test['slope'], test['volatility'], test['rsi'],
