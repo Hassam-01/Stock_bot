@@ -60,27 +60,24 @@ def main():
             print("Average Volume: ", avg_volume)
             print("\033[95m--------------------------------------------------\033[0m")
 
-            
-            # action = apply_fuzzy_logic(slope, volatility, next_state)
-            action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI, moving_average_slope)
-            
-            current_price = close_prices[-1]
-            make_trade(action, current_price)
-
-            print("Abcd")
             # action = apply_fuzzy_logic(slope, volatility, next_state)
             action, signal_value = apply_fuzzy_logic(slope, volatility, next_state, avg_volume, RSI,
                                                      moving_average_slope, common_signal)
-
             current_price = close_prices[-1]
             if (action == "BUY"):
-                recommended = recommended_action_BUY(ticker = stock_symbol, price_of_stock= current_price, net_worth= 1500000, signal_value = signal_value)
-            elif(action == "SELL"):
-                recommended = recommended_action_SELL( ticker = stock_symbol, price_of_stock= current_price,  stocks_owned= 10, signal_value = signal_value,purchase_price= 500)
+                recommended = recommended_action_BUY(ticker=stock_symbol, price_of_stock=current_price,
+                                                     net_worth=1500000,
+                                                     signal_value=signal_value)
+            elif (action == "SELL"):
+                recommended = recommended_action_SELL(ticker=stock_symbol, price_of_stock=current_price,
+                                                      stocks_owned=10,
+                                                      signal_value=signal_value, purchase_price=500)
             else:
                 recommended = "HOLD"
             make_trade(action, current_price)
             print(f"The recommended action is: {recommended}")
+
+
         except Exception as e:
             print(f"Error: {e}")
             time.sleep(10)
@@ -89,6 +86,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 #
 # from fastapi import FastAPI, HTTPException
