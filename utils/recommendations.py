@@ -11,6 +11,13 @@ def recommended_action_BUY( ticker, price_of_stock, net_worth,signal_value):
     :return investment recommendation
     """
 
+    # Variables:
+    # 1. confidence_level: The level of confidence in the buy signal, which is based on the signal_value.
+    # 2. investment_domains: A deque that holds the possible investment percentages based on confidence_level.
+    # 3. recommended_investment: The amount of net_worth to invest, calculated by multiplying net_worth with the appropriate percentage from investment_domains.
+    # 4. stocks_num: The number of stocks to buy, calculated based on recommended_investment divided by price_of_stock.
+    # 5. stocks_investment: The total amount of money required to buy the recommended number of stocks (stocks_num * price_of_stock).
+
     if price_of_stock > net_worth :
         return "Investment not recommended. You have low balance brother"
 
@@ -19,6 +26,12 @@ def recommended_action_BUY( ticker, price_of_stock, net_worth,signal_value):
 
     # Domain for investment based on confidence level
     investment_domains = deque()  # This will hold the possible investment percentages
+
+    # Domains:
+    # 1. confidence_level > 0.8: Invest 20% of net_worth.
+    # 2. 0.6 < confidence_level <= 0.8: Invest 10% of net_worth.
+    # 3. 0.4 < confidence_level <= 0.6: Invest 5% of net_worth.
+    # 4. confidence_level <= 0.4: Invest 2% of net_worth.
 
     # Apply constraints based on the confidence level
     if confidence_level > 0.8:# represents a high BUY signal
@@ -31,7 +44,7 @@ def recommended_action_BUY( ticker, price_of_stock, net_worth,signal_value):
         investment_domains.append(0.02)  # Invest 2% of net worth
 
 
-    # Constraint: Investment cannot exceed networth
+    # Constraint 1: Investment cannot exceed networth
     recommended_investment = net_worth * investment_domains[0]
 
 
@@ -61,12 +74,9 @@ def recommended_action_SELL(ticker,stocks_owned,price_of_stock,signal_value,purc
     """
 
     # sell signal is strongest when is closer to 0 and decreases when it's approaching 0.3
-    """okay so if the trade signal is sell firstly we are gonna check whether the price of the stock has increased enough so that
-    a good profit can be made that is if the stock per price has increased 40% of it's purchase price then we should sell it gaining a profit of 40%  
-    and the sell signal is near zero then it should sell 40% of it's stocks owned  that is a high sell signal  but if the signal value is low and the selling price has not increased much recommend 
-    the least number of stocks needs to sell"""
 
-    # Step 1: Define CSP variables and domains
+
+
     # Variables:
     # 1. Profit percentage (based on price increase)
     # 2. Number of stocks to sell (subset of stocks_owned)
@@ -75,7 +85,7 @@ def recommended_action_SELL(ticker,stocks_owned,price_of_stock,signal_value,purc
     profit_percentage = ((price_of_stock - purchase_price) / purchase_price) * 100
     stocks_to_sell = deque()  # Domain for number of stocks to sell
 
-    # Step 2: Define constraints
+
     # Constraint 1: Price of stock should have increased enough to make a profit
     if profit_percentage >= 30:  # A significant profit margin (40% increase in price)
         if signal_value <= 0.2:  # Strong SELL signal
