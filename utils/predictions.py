@@ -168,7 +168,7 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
             if trend_today == "BUY":
                 action = "BUY"
             elif trend_today == "SELL":
-                action = "HOLD"
+                action = "SELL"
             else:
                 action = "HOLD"
 
@@ -181,7 +181,7 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
             if trend_today == "BUY":
                 action = "BUY"
             elif trend_today == "SELL":
-                action = "HOLD"
+                action = "SELL"
             else:
                 action = "HOLD"
 
