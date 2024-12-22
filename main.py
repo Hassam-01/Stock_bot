@@ -175,7 +175,7 @@ def get_sell_trade_recommendation(request: RecommendationRequest):
         raise HTTPException(status_code=500, detail=f"Error processing the request: {e}")
 
 @app.post("/api/trade/buy/recommendation")
-def get_buy_trade_recommendation(signal:str ,request: RecommendationRequest):
+def get_buy_trade_recommendation(request: RecommendationRequest):
     stock_price = request.stock_price
     net_worth = request.net_worth
     signal_value = request.signal_value
