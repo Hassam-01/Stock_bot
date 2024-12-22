@@ -3,6 +3,28 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy.control import Antecedent, Consequent, Rule, ControlSystem, ControlSystemSimulation
 from config import MARKOV_MATRIX
+<<<<<<< HEAD
+=======
+
+
+def predict_state(stock_data):
+    """
+    find the current state of the data with the help of the last 2 month data (stock_data)
+    """
+    # Calculate the average closing price for the last 2 months
+    avg_close_price = sum([day["close"] for day in stock_data]) / len(stock_data)
+    # Get the current closing price
+    current_close_price = stock_data[-1]["close"]
+    # Calculate the percentage change in price
+    price_change = (current_close_price - avg_close_price) / avg_close_price
+    # Define the state based on the price change
+    if price_change > 0.02:
+        return "UP"
+    elif price_change < -0.02:
+        return "DOWN"
+    else:
+        return "STABLE"
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
 
 def predict_state(stock_data):
     """ 
@@ -36,6 +58,10 @@ def markov_prediction(current_state):
     next_state = random.choices(list(probabilities.keys()), weights=probabilities.values())[0]
     return next_state
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
 def normalize_rsi(rsi_value):
     """Normalize RSI value to be between 0 and 1."""
     # Ensure rsi_value is a float or int, not a string
@@ -44,7 +70,13 @@ def normalize_rsi(rsi_value):
     else:
         raise ValueError(f"Expected a numerical value for RSI, got {type(rsi_value)} instead.")
 
+<<<<<<< HEAD
 def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_value, rsi_value, moving_avg_value, trend_today):
+=======
+
+def apply_fuzzy_logic(slope_value, volatility_value, next_state, avg_volume_value, rsi_value, moving_avg_value,
+                      trend_today):
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
     """
     Predicts stock action (BUY, SELL, or HOLD) using fuzzy logic based on various indicators.
 
@@ -63,7 +95,11 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
     # Normalize RSI value to be between 0 and 1
     rsi_value = float(rsi_value)
     rsi_value = normalize_rsi(rsi_value)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
     print("Normalized RSI: ", rsi_value)
 
     # Define fuzzy variables
@@ -161,14 +197,22 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
     print(trend_today)
     if next_state == 'UP':
         if signal_value > 0.55:
+<<<<<<< HEAD
             action = "BUY" 
+=======
+            action = "BUY"
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
         elif signal_value < 0.3:
             action = "SELL"
         else:
             if trend_today == "BUY":
                 action = "BUY"
             elif trend_today == "SELL":
+<<<<<<< HEAD
                 action = "SELL"
+=======
+                action = "HOLD"
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
             else:
                 action = "HOLD"
 
@@ -181,7 +225,11 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
             if trend_today == "BUY":
                 action = "BUY"
             elif trend_today == "SELL":
+<<<<<<< HEAD
                 action = "SELL"
+=======
+                action = "HOLD"
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
             else:
                 action = "HOLD"
 
@@ -196,6 +244,10 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state , avg_volume_val
     print("Action: ", action)
 
     return action, signal_value
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
 
 if __name__ == "__main__":
     # Example usage
@@ -204,7 +256,11 @@ if __name__ == "__main__":
         {'slope': -0.7, 'volatility': 0.9, 'rsi': 75, 'moving_avg': -0.4, 'avg_volume': 0.3, 'next_state': 'DOWN'},
         {'slope': 0.0, 'volatility': 0.5, 'rsi': 50, 'moving_avg': 0.0, 'avg_volume': 0.5, 'next_state': 'STABLE'},
     ]
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 6404fa97c9d08ecac392587e1236bc18e545289e
     for test in test_cases:
         action, signal = apply_fuzzy_logic(
             test['slope'], test['volatility'], test['rsi'],
