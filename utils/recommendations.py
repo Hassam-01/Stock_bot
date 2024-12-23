@@ -32,20 +32,25 @@ def recommended_action_BUY( ticker, price_of_stock, net_worth,signal_value):
     # 2. 0.6 < confidence_level <= 0.8: Invest 10% of net_worth.
     # 3. 0.4 < confidence_level <= 0.6: Invest 5% of net_worth.
     # 4. confidence_level <= 0.4: Invest 2% of net_worth.
-
+    investment = 0
     # Apply constraints based on the confidence level
     if confidence_level > 0.8:# represents a high BUY signal
+        investment = 0.20
         investment_domains.append(0.20)  # Invest 20% of net worth
     elif confidence_level > 0.6:# intermidiate BUY signal
+        investment = 0.10
         investment_domains.append(0.10)  # Invest 10% of net worth
     elif confidence_level >= 0.4:#weak BUY signal
+        investment = 0.05
         investment_domains.append(0.05)  # Invest 5% of net worth
-    elif confidence_level < 0.4:#weak signal BUY
-        investment_domains.append(0.02)  # Invest 2% of net worth
+    # elif confidence_level < 0.4:#weak signal BUY
+    #     investment_domains.append(0.02)  # Invest 2% of net worth
 
 
     # Constraint 1: Investment cannot exceed networth
     recommended_investment = net_worth * investment_domains[0]
+    if(recommended_investment < price_of_stock):
+        return f"The stock price is more than {investment*100}% of your net worth"
 
 
     #Constraint 2: The investment cannot exceed the recommended investment
@@ -96,10 +101,11 @@ def recommended_action_SELL(ticker,stocks_owned,price_of_stock,signal_value,purc
             stocks_to_sell.append(int(stocks_owned * 0.1))  # Sell 10% of stocks
 
     else:  # Constraint 2: If profit is not significant, recommend minimal selling
-        if signal_value <= 0.3:  #  SELL signal but low profit
-            stocks_to_sell.append(int(stocks_owned * 0.1))  # Sell 10% of stocks
-        else:
-            stocks_to_sell.append(int(stocks_owned * 0.1))#sell 5% of stocks
+        return f"This sale has a profit less than 30%. Sale not recommended"
+        # if signal_value <= 0.3:  #  SELL signal but low profit
+        #     stocks_to_sell.append(int(stocks_owned * 0.1))  # Sell 10% of stocks
+        # else:
+        #     stocks_to_sell.append(int(stocks_owned * 0.1))#sell 5% of stocks
 
     # Constraint 3: Ensure at least one stock is sold if possible
     if stocks_owned <= 1:
@@ -114,35 +120,35 @@ def recommended_action_SELL(ticker,stocks_owned,price_of_stock,signal_value,purc
 
 
 if __name__ == "__main__" :
-    print(recommended_action_BUY(
-        ticker="AAPL",
-        price_of_stock=150,
-        net_worth=5000,
-        signal_value=0.9  # High confidence in BUY signal
-    ))
-    print(recommended_action_BUY(
-        ticker="GOOGL",
-        price_of_stock=2500,
-        net_worth=10000,
-        signal_value=0.7  # Intermediate confidence in BUY signal
-    ))
-    print(recommended_action_BUY(
-        ticker="MSFT",
-        price_of_stock=300,
-        net_worth=20000000,
-        signal_value=0.3  # Weak BUY signal
-    ))
-    print(recommended_action_BUY(
-        ticker="AAPL",
-        price_of_stock=4000,
-        net_worth=1000,
-        signal_value=0.85  # High confidence in BUY signal
-    ))
+    # print(recommended_action_BUY(
+    #     ticker="AAPL",
+    #     price_of_stock=150,
+    #     net_worth=5000,
+    #     signal_value=0.9  # High confidence in BUY signal
+    # ))
+    # print(recommended_action_BUY(
+    #     ticker="GOOGL",
+    #     price_of_stock=2500,
+    #     net_worth=10000,
+    #     signal_value=0.7  # Intermediate confidence in BUY signal
+    # ))
+    # print(recommended_action_BUY(
+    #     ticker="MSFT",
+    #     price_of_stock=300,
+    #     net_worth=20000000,
+    #     signal_value=0.4  # Weak BUY signal
+    # ))
+    # print(recommended_action_BUY(
+    #     ticker="AAPL",
+    #     price_of_stock=400,
+    #     net_worth=1000,
+    #     signal_value=0.85  # High confidence in BUY signal
+    # ))
     print(recommended_action_SELL(
         ticker="AAPL",
         stocks_owned=100,
         price_of_stock=200,
-        signal_value=0.9,  # High SELL signal
+        signal_value=0.2,  # High SELL signal
         purchase_price=100
     ))
 
@@ -150,14 +156,14 @@ if __name__ == "__main__" :
         ticker="GOOGL",
         stocks_owned=50,
         price_of_stock=1800,
-        signal_value=0.6,  # Moderate SELL signal
+        signal_value=0.3,  # Moderate SELL signal
         purchase_price=1500
     ))
     print(recommended_action_SELL(
         ticker="MSFT",
         stocks_owned=30,
         price_of_stock=300,
-        signal_value=0.3,  # Low SELL signal
+        signal_value=0.1,  # Low SELL signal
         purchase_price=290
     ))
     print(recommended_action_SELL(
