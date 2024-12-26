@@ -105,11 +105,12 @@ class RecommendationRequest(BaseModel):
     signal_value: float = None
     stock_price: float = None
     net_worth: float = None
+    volatility: float = None
     
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -159,17 +160,23 @@ def get_recommendation(request: RecommendationRequest):
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing the request: {e}")
-    
+
+@app.get("/")
+async def read_root():
+    return "Hello world"
+
 @app.post("/api/trade/sell/recommendation")
 def get_sell_trade_recommendation(request: RecommendationRequest):
-    print(request, " sell ")
+    print(request)
     ticker = request.ticker.upper()
     stocks_owned = request.stocks_owned
     purchase_price = request.purchase_price
     signal_value = request.signal_value
     stock_price = request.stock_price
+    volatility = request.volatility
     try:
-        recommended = recommended_action_SELL(ticker, stocks_owned,stock_price, signal_value, purchase_price)
+        recommended = recommended_action_SELL(ticker, stocks_owned,stock_price, signal_value, purchase_price, volatility)
+        print("recommended: ", recommended)
         return recommended
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing the request: {e}")
@@ -180,8 +187,9 @@ def get_buy_trade_recommendation(request: RecommendationRequest):
     net_worth = request.net_worth
     signal_value = request.signal_value
     ticker = request.ticker.upper()
+    volatility  = request.volatility
     try:
-        recommended = recommended_action_BUY(ticker, stock_price, net_worth, signal_value)
+        recommended = recommended_action_BUY(ticker, stock_price, net_worth, signal_value, volatility)
         return recommended
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing the request: {e}")
