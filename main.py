@@ -110,7 +110,7 @@ class RecommendationRequest(BaseModel):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["https://stock-bot-web-client-hassam-alis-projects-909d02f3.vercel.app/", "https://stock-bot-web-client-git-main-hassam-alis-projects-909d02f3.vercel.app/", "https://stock-bot-web-client.vercel.app/", "https://stock-bot-web-client-kl2gzo20p-hassam-alis-projects-909d02f3.vercel.app/", "https://stock-bot-web-client-git-main-hassam-alis-projects-909d02f3.vercel.app/"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
