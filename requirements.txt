@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+termcolor
+requests
+pandas
+numpy
+scipy
+networkx
+packaging
+scikit-fuzzy
+scikit-learn
