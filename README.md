@@ -42,9 +42,9 @@ pip install -r requirements.txt
 ## Usage
 
 ### Backend Mode
-To run the bot and connect it to the front end:
+To run the bot and connect it to the front end (which not required as the project is live):
 ```bash
-py main.py
+py -m uvicorn main:app --reload --host 0.0.0.0 --port 5000
 ```
 
 ### Standalone Mode
@@ -79,3 +79,6 @@ Follow the prompts to enter the stock symbol, your net worth, and additional inf
 - Add more robust error handling.
 - Integrate additional APIs for more comprehensive data.
 - Enhance visualization for trends and predictions.
+
+## Live
+Link: https://stock-bot-web-client.vercel.app
