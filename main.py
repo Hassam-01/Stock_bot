@@ -113,7 +113,7 @@ app.add_middleware(
     allow_origins=[
         "https://stock-bot-web-client-hassam-alis-projects-909d02f3.vercel.app",
         "https://stock-bot-web-client-git-main-hassam-alis-projects-909d02f3.vercel.app",
-        "https://stock-bot-web-client.vercel.app"
+        "https://stock-bot-web-client.vercel.app","http://localhost:3001",
     ],
     allow_credentials=True,
     allow_methods=["*"],

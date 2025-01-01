@@ -140,7 +140,7 @@ if __name__ == "__main__":
         ticker="AAPL",
         stocks_owned=3,
         price_of_stock=253.48,
-        signal_value=0.44,  # High confidence in BUY signal
+        signal_value=0.44,  
         purchase_price=147,
         # net_worth=4381
         volatility=0.04  # Low volatility
