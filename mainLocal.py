@@ -5,7 +5,6 @@ from utils.calculations import calculate_slope, calculate_volatility, normalize_
     calculate_moving_average_slope
 from utils.predictions import markov_prediction, apply_fuzzy_logic, predict_state
 from utils.trading import make_trade
-from data.start import validateUser
 import data.data_extraction as extraction
 from utils.recommendations import recommended_action_BUY, recommended_action_SELL
 import sys

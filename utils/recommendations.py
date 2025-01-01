@@ -136,6 +136,8 @@ def recommended_action_BUY(
     else:
         return {"message": "Investment exceeds available funds or insufficient funds for even one stock."}
 if __name__ == "__main__":
+    
+    # ! Sample execution data only for value recommendation
     print(recommended_action_SELL(
         ticker="AAPL",
         stocks_owned=3,

@@ -15,7 +15,7 @@ def predict_state(stock_data):
     current_close_price = stock_data[-1]["close"]
     # Calculate the percentage change in price
     price_change = (current_close_price - avg_close_price) / avg_close_price
-    # Define the state based on the price change
+    #  the state based on the price change
     if price_change > 0.02:
         return "UP"
     elif price_change < -0.02:
@@ -51,7 +51,7 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state, avg_volume_valu
     """
     Predicts stock action (BUY, SELL, or HOLD) using fuzzy logic based on various indicators.
 
-    Args:
+    Variables:
         slope_value (float): The slope of the stock prices (trend direction).
         volatility_value (float): The volatility of the stock prices (market risk).
         rsi_value (float): The Relative Strength Index (RSI) value.
@@ -67,9 +67,7 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state, avg_volume_valu
     rsi_value = float(rsi_value)
     rsi_value = normalize_rsi(rsi_value)
     
-    print("Normalized RSI: ", rsi_value)
-
-    # Define fuzzy variables
+    #  fuzzy variables
     slope = Antecedent(np.arange(-1, 1.1, 0.1), 'slope')
     volatility = Antecedent(np.arange(0, 1.1, 0.1), 'volatility')
     rsi = Antecedent(np.arange(0, 1.1, 0.1), 'rsi')
@@ -77,37 +75,37 @@ def apply_fuzzy_logic(slope_value, volatility_value, next_state, avg_volume_valu
     avg_volume = Antecedent(np.arange(0, 1.1, 0.1), 'avg_volume')
     signal = Consequent(np.arange(0, 1.1, 0.1), 'signal')
 
-    # Define membership functions for slope
+    #  membership functions for slope
     slope['downward'] = fuzz.trimf(slope.universe, [-1, -0.6, -0.2])
     slope['flat'] = fuzz.trimf(slope.universe, [-0.3, 0, 0.3])
     slope['upward'] = fuzz.trimf(slope.universe, [0.2, 0.6, 1])
 
-    # Define membership functions for volatility
+    #  membership functions for volatility
     volatility['low'] = fuzz.trimf(volatility.universe, [0, 0, 0.2])
     volatility['medium'] = fuzz.trimf(volatility.universe, [0.1, 0.45, 0.7])
     volatility['high'] = fuzz.trimf(volatility.universe, [0.6, 1, 1])
 
-    # Define membership functions for RSI
+    #  membership functions for RSI
     rsi['oversold'] = fuzz.trimf(rsi.universe, [0, 0, 0.3])
     rsi['neutral'] = fuzz.trimf(rsi.universe, [0.25, 0.5, 0.75])
     rsi['overbought'] = fuzz.trimf(rsi.universe, [0.7, 1, 1])
 
-    # Define membership functions for moving average
+    #  membership functions for moving average
     moving_avg['below'] = fuzz.trimf(moving_avg.universe, [-1, -0.6, 0])
     moving_avg['at'] = fuzz.trimf(moving_avg.universe, [-0.1, 0, 0.1])
     moving_avg['above'] = fuzz.trimf(moving_avg.universe, [0, 0.6, 1])
 
-    # Define membership functions for average volume
+    #  membership functions for average volume
     avg_volume['low'] = fuzz.trimf(avg_volume.universe, [0, 0, 0.4])
     avg_volume['medium'] = fuzz.trimf(avg_volume.universe, [0.3, 0.5, 0.7])
     avg_volume['high'] = fuzz.trimf(avg_volume.universe, [0.6, 1, 1])
 
-    # Define membership functions for signal
+    #  membership functions for signal
     signal['sell'] = fuzz.trimf(signal.universe, [0, 0, 0.3])
     signal['hold'] = fuzz.trimf(signal.universe, [0.2, 0.5, 0.6])
     signal['buy'] = fuzz.trimf(signal.universe, [0.5, 1, 1])
 
-    # Define fuzzy rules
+    #  fuzzy rules
     rules = [
         Rule(slope['downward'] & volatility['high'], signal['sell']),
         Rule(slope['downward'] & volatility['medium'], signal['sell']),
