@@ -34,8 +34,10 @@ def markov_prediction(current_state):
         str: The predicted next state.
     """
     probabilities = MARKOV_MATRIX[current_state]
-    next_state = random.choices(list(probabilities.keys()), weights=probabilities.values())[0]
-    return next_state
+    #volatility aware policy
+    if probabilities['UP'] > 0.3 and probabilities['DOWN'] > 0.3:  # High volatility (if both the UP and DOWN probability is high then go with the stable state)
+        return 'STABLE'
+    return max(probabilities, key=probabilities.get)  # Otherwise, follow the highest probability    return next_state
 
 def normalize_rsi(rsi_value):
     """Normalize RSI value to be between 0 and 1."""
