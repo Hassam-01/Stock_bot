@@ -5,7 +5,6 @@ from utils.fetch_data import fetch_data
 from termcolor import colored
 
 # Adjusted today for simulation purposes
-# adjusted_today = datetime.now() 
 adjusted_today = datetime.now() - timedelta(days=5)
 
 
@@ -15,13 +14,15 @@ def filter_last_five_days(data):
     :param data: List of trading data.
     :return: Filtered data for the last 5 trading days.
     """
-    # Use the last 5 elements as they represent the last trading days
+    # Using the last 5 elements as they represent the last trading days
     return data[-5:]
 
 
 def generate_buy_sell_signals(data):
+    
     """
     Generates buy/sell/hold signals based on closing prices.
+    this is used for finding the trend in the market
     """
     signals = []
     for i in range(1, len(data)):
@@ -61,7 +62,7 @@ def analyze_data(stock_symbol):
     data = fetch_data(stock_symbol, start_date, end_date)
 
     # dataSend send should be 5 days less than the current date
-    # dont call the api again, use the data fetched above start to end -5
+    # not calling the api again, using the data fetched above start to end -5
     dataSend = data[:-4]
     # adjusted_today = last 5th from data fetched
 

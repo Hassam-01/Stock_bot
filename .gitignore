@@ -1,0 +1,6 @@
+__pycache__/*.pyc
+
+tradingBot.py
+testapi.py
+tempCodeRunnerFile.py
+.vercel
