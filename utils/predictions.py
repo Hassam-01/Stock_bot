@@ -24,8 +24,57 @@ def predict_state(stock_data):
         return "STABLE"
 
 
+# ! MARKOV ---------------
+REWARDS = {
+    'UP': 10,
+    'STABLE': 5,
+    'DOWN': -10,
+}
+
+# Discount factor
+GAMMA = 0.9
+
+def value_iteration(markov_matrix, rewards, gamma, threshold=1e-4):
+    """Performs value iteration to find the optimal state values."""
+    states = list(markov_matrix.keys())
+    V = {state: 0 for state in states}  # Initialize state values to 0
+
+    while True:
+        delta = 0
+        new_V = V.copy()
+        for state in states:
+            # Compute expected value for each action
+            expected_values = []
+            for next_state, prob in markov_matrix[state].items():
+                expected_values.append(prob * (rewards[next_state] + gamma * V[next_state]))
+            # Update state value with the max expected value
+            new_V[state] = max(expected_values)
+            delta = max(delta, abs(new_V[state] - V[state]))
+        
+        V = new_V
+        if delta < threshold:  # Convergence check
+            break
+
+    return V
+
+def get_optimal_policy(markov_matrix, rewards, gamma, value_function):
+    """Derives the optimal policy from the value function."""
+    policy = {}
+    for state in markov_matrix:
+        # Choose the action with the highest expected value
+        action_values = {
+            action: rewards[action] + gamma * sum(
+                prob * value_function[next_state]
+                for next_state, prob in markov_matrix[state].items()
+            )
+            for action in markov_matrix[state]
+        }
+        policy[state] = max(action_values, key=action_values.get)
+    return policy
+
+
 def markov_prediction(current_state):
-    """Predicts the next state using Markov's model.
+    """Predicts the next state using Markov's model and optimal policy.
 
     Args:
         current_state (str): The current state of the market.
@@ -33,13 +82,24 @@ def markov_prediction(current_state):
     Returns:
         str: The predicted next state.
     """
-    probabilities = MARKOV_MATRIX[current_state]
-    #volatility aware policy
-    if probabilities['UP'] > 0.3 and probabilities['DOWN'] > 0.3:  # High volatility (if both the UP and DOWN probability is high then go with the stable state)
+    # Run value iteration and derive the optimal policy
+    value_function = value_iteration(MARKOV_MATRIX, REWARDS, GAMMA)
+    optimal_policy = get_optimal_policy(MARKOV_MATRIX, REWARDS, GAMMA, value_function)
+    
+    # Get the optimal action for the current state
+    optimal_action = optimal_policy[current_state]
+    
+    # Get the transition probabilities for the optimal action
+    probabilities = MARKOV_MATRIX[optimal_action]
+    
+    # Volatility-aware policy: prioritize 'STABLE' for high volatility
+    if probabilities['UP'] > 0.3 and probabilities['DOWN'] > 0.3:
         return 'STABLE'
-    return max(probabilities, key=probabilities.get)  # Otherwise, follow the highest probability    return next_state
+    
+    # Otherwise, return the next state with the highest probability
+    return max(probabilities, key=probabilities.get)
 
-
+# ! -------------------
 def normalize_rsi(rsi_value):
     """Normalize RSI value to be between 0 and 1."""
     # Ensure rsi_value is a float or int, not a string
